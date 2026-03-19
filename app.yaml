@@ -1,0 +1,50 @@
+# Google App Engine Configuration for Event Manager Backend
+runtime: nodejs20
+
+# Instance configuration
+instance_class: F1
+automatic_scaling:
+  min_instances: 0
+  max_instances: 5
+  target_cpu_utilization: 0.65
+
+# Environment variables - Add your sensitive data here
+env_variables:
+  NODE_ENV: production
+  PORT: 8080
+  MONGODB_URI: "your_mongodb_connection_string"
+  TICKETMASTER_API_KEY: "your_ticketmaster_api_key"
+  TICKETMASTER_BASE_URL: https://app.ticketmaster.com/discovery/v2
+  SPOTIFY_CLIENT_ID: "your_spotify_client_id"
+  SPOTIFY_CLIENT_SECRET: "your_spotify_client_secret"
+  SPOTIFY_BASE_URL: https://api.spotify.com/v1
+  GOOGLE_MAPS_API_KEY: "your_google_maps_api_key"
+  GOOGLE_CLOUD_PROJECT_ID: "your_google_cloud_project_id"
+  GCLOUD_STORAGE_BUCKET: "your_gcloud_storage_bucket"
+  ALLOWED_ORIGINS: "*"
+  DB_NAME: eventmanager
+  DB_COLLECTION_FAVORITES: favorites
+  CACHE_TTL: "3600"
+  SPOTIFY_TOKEN_CACHE_TTL: "3000"
+
+# Health check configuration
+readiness_check:
+  path: "/health"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: 300
+
+liveness_check:
+  path: "/health"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 4
+  success_threshold: 2
+
+# Handlers
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
